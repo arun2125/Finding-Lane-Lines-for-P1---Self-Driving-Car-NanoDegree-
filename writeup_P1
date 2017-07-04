@@ -1,0 +1,48 @@
+# **Finding Lane Lines on the Road**
+
+## Project 1 Writeup - Self Driving Car NanoDegree
+
+---
+
+**Finding Lane Lines on the Road**
+
+The goals / steps of this project are the following:
+* Make a pipeline that finds lane lines on the road
+* Reflect on your work in a written report
+
+---
+
+### Reflection
+
+Here is how I prepared my pipeline,
+
+1. Convert the image to grayscale using the provided grayscale function.
+2. Apply gaussian blur with kernel size 5 using the provided gaussian blur function.
+3. Then defined the parameters for applying the canny transformation on the image to identify edges with 50 as low threshold and 120 as high threshold.
+4. Then applied masking to the canny-generated image to identify the region of interest for performing hough transform.
+5. Define the parameters for applying hough parameters and tune them by checking the output continuously by printing it out.
+6. Modify the draw_lines function to identify the two straight lane lines. Connect and extrapolate the lines to draw to over the original image.
+7. Use the provided weighted image function to merge the extrapolated hough lines with the original image.
+
+In order to draw a single line on the left and right lanes, I modified the draw_lines() function. This was done by separating the slopes of all identified lane lines into two groups i.e. with negative and positive slope. These slopes were then averaged to calculate the slope of two distinct lane lines. The top most point of each lane line was identified by minimizing the y value for each group. The top most coordinate and the slopes were then used to extrapolate and plot the two lane lines.
+
+<figure>
+ <img src="test_images_output/outputsolidWhiteCurve.jpg" width="580" alt="Combined Image" />
+ <figcaption>
+ <p></p>
+ <p style="text-align: center;"> This is how solidWhiteCurve image looked after processing with the above described pipeline </p>
+ </figcaption>
+</figure>
+
+### Potential Shortcomings
+
+One obvious shortcoming in the current pipeline is visible when processing the challenge.mp4 video. In case of a road with markings on it and also with the size of region of interest changing between different kind of roads, the current pipeline is not able to handle it and fails miserably.
+
+Another shortcoming could be when a vehicle comes in between the region of interest. This would result in misidentification of the edges and therefore result in the pipeline not being able to identify the lane lines properly.
+
+
+### Possible Improvements
+
+A possible improvement would be to identify the two lane lines simultaneously, thus making their identification co-dependent on each other. We can then ignore erroneous data feeds like trees, potholes or shades near one lane line and focus on continue to identify both the lines together without getting distracted.
+
+Another potential improvement could be to include sensor data along with image data to make sure we can identify other objects on the road and ignore them. This way we can continue to focus on identifying just the lane lines. 
